@@ -13,9 +13,9 @@ class Preprocessor:
             self.features = json.load(features_file)
         self.spark = spark_cs
 
-    def load_data(self, data_path: str) -> pyspark.sql.DataFrame:
-        df = self.spark.read.csv(data_path, header=True, inferSchema=True, encoding="utf-8")
-        return df
+    # def load_data(self, data_path: str) -> pyspark.sql.DataFrame:
+    #     df = self.spark.read.csv(data_path, header=True, inferSchema=True, encoding="utf-8")
+    #     return df
 
     def preprocess(self, df: pyspark.sql.DataFrame) -> pyspark.sql.DataFrame:
         id_columns = self.features["id"]
