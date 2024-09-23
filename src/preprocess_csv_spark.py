@@ -1,11 +1,12 @@
 import json
+import logging
 
 import pyspark.sql
 from pyspark.ml.feature import StandardScaler, VectorAssembler
 from pyspark.sql import functions
 
 FEATURES_COLUMN = "scaled_feature"
-
+logger = logging.Logger("preproc")
 
 class Preprocessor:
     def __init__(self, spark_cs: pyspark.sql.SparkSession, features_path: str):
@@ -27,13 +28,16 @@ class Preprocessor:
 
         all_columns = id_columns + numeric_columns + cat_columns
         df_with_selected_columns = df.select(*all_columns)
+        # df_with_selected_columns.printSchema()
 
         vec_assembler = VectorAssembler(
             inputCols=feature_numeric, outputCol="features"
         )
-        df_with_features = vec_assembler.transform(df_with_selected_columns)
 
+        df_with_features = vec_assembler.transform(df_with_selected_columns)
+        # df_with_features.printSchema()
         scaler = StandardScaler(inputCol="features", outputCol=FEATURES_COLUMN)
         scaler_model = scaler.fit(df_with_features)
         df_scaled_features = scaler_model.transform(df_with_features)
+        # df_scaled_features.printSchema()
         return df_scaled_features

@@ -27,6 +27,7 @@ def run(config: configs.TrainConfig):
 
     preprocessor = preprocess_csv_spark.Preprocessor(spark, config.data.feature_path)
     data = db_manager.read_data(spark)
+    # logger.warning(f"Rows count: {data.count()}")
     df = preprocessor.preprocess(data)
 
     kmeans_kwargs = config.kmeans.__dict__

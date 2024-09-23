@@ -9,7 +9,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FoodProducts]') AND type in (N'U'))
 CREATE TABLE FoodProducts (
     code BIGINT,
-    product_name VARCHAR(255),
+    product_name TEXT,
     energy_kcal_100g FLOAT,
     energy_100g FLOAT,
     fat_100g FLOAT,
@@ -33,8 +33,10 @@ GO
 BULK INSERT FoodProducts
 FROM '/data/openfood.csv'
 WITH (
-    FORMAT='CSV',
-    FIRSTROW = 2
+     FIRSTROW = 2,
+     FIELDTERMINATOR = ',',
+     ROWTERMINATOR = '0x0A',
+     TABLOCK
 );
 GO
 
